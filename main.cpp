@@ -55,7 +55,7 @@ int minimax(vector<int> board, int currPlayer) {
     vector<int> moveScores = getMoveScores(board, currPlayer);
 
     int bestMoveIndex;
-    if(currPlayer == 0) {
+    if(currPlayer == 1) {
         return emptySpots.at(getMaxIndex(moveScores));
     }
 
@@ -66,11 +66,11 @@ vector<int> getMoveScores(vector<int> board, int currPlayer) {
     vector<int> emptySpots = getEmptySpots(board);
     vector<int> moveScores;
 
-    if(playerWins(currPlayer, board) && currPlayer == 0) {
+    if(playerWins(currPlayer, board) && currPlayer == 1) {
         moveScores.push_back(1);
         return moveScores;
     }
-    else if(playerWins(currPlayer, board) && currPlayer == 1) {
+    else if(playerWins(currPlayer, board) && currPlayer == 2) {
         moveScores.push_back(-1);
         return moveScores;
     } 
@@ -83,11 +83,11 @@ vector<int> getMoveScores(vector<int> board, int currPlayer) {
         board.at((*i)) = currPlayer; 
 
         int score;
-        if(currPlayer == 0) {
-            score = getMoveScores(board, 1).at(0);
+        if(currPlayer == 1) {
+            score = getMoveScores(board, 2).at(0);
         }
-        else if(currPlayer == 1) {
-            score = getMoveScores(board, 0).at(0);
+        else if(currPlayer == 2) {
+            score = getMoveScores(board, 1).at(0);
         }
 
         board.at((*i)) = 0;
