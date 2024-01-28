@@ -38,4 +38,10 @@ bool GameState::PlayerWins(int player) {
             (board.at(2) == player && board.at(4) == player && board.at(6) == player));
 }
 
+int GameState::GetP1() {
+    return p1;
+}
 
+int GameState::GetP2() {
+    return p2;
+}

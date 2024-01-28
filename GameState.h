@@ -18,6 +18,8 @@ class GameState {
         vector<int> GetEmptySpots();
         bool PlayerWins(int player);
         void MakeMove(int index);
+        int GetP1();
+        int GetP2();
 };
 
 #endif
