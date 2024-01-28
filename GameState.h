@@ -10,13 +10,14 @@ class GameState {
     private:
         static const int p1 = 1;
         static const int p2 = 2;
-        vector<int> board(9);
+        int currP = 1;
+        vector<int> board;
     public:
-        GameState();
+        GameState(int initP);
         vector<int> GetBoard();
         vector<int> GetEmptySpots();
         bool PlayerWins(int player);
         void MakeMove(int index);
-}
+};
 
 #endif
