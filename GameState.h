@@ -15,17 +15,14 @@ class GameState {
     public:
         GameState(int initP);
         vector<int> GetBoard();
-        vector<int> GetEmptySpots(vector<int> board);
-        bool PlayerWins(int player, vector<int> board);
+        vector<int> GetEmptySpots(vector<int> newBoard);
+        bool PlayerWins(int player, vector<int> newBoard);
         bool IsDraw();
         bool GameOver();
         void MakeMove(int index);
         int GetP1();
         int GetP2();
-        int AIBestMove();
-        vector<int> GetMoveScores(vector<int> board, int currPlayer, int origPlayer);
-        int GetMaxIndex(vector<int> scores);
-        int GetMinIndex(vector<int> scores);
+        vector<int> AIBestMove(vector<int> newBoard, int player);
         void PrintBoard();
         bool IsValidMove(int move);
         void RequestMove();

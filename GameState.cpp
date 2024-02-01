@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -15,27 +16,27 @@ vector<int> GameState::GetBoard() {
     return board;
 }
 
-vector<int> GameState::GetEmptySpots(vector<int> board) {
+vector<int> GameState::GetEmptySpots(vector<int> newBoard) {
     vector<int> emptySpots;
 
-    for(vector<int>::iterator i = board.begin(); i != board.end(); i++) {
+    for(vector<int>::iterator i = newBoard.begin(); i != newBoard.end(); i++) {
         if((*i) == 0) {
-            emptySpots.push_back(i - board.begin());
+            emptySpots.push_back(i - newBoard.begin());
         }
     }
 
     return emptySpots;
 }
 
-bool GameState::PlayerWins(int player, vector<int> board) {
-    return ((board.at(0) == player && board.at(1) == player && board.at(2) == player) ||
-            (board.at(3) == player && board.at(4) == player && board.at(5) == player) ||
-            (board.at(6) == player && board.at(7) == player && board.at(8) == player) ||
-            (board.at(0) == player && board.at(3) == player && board.at(6) == player) || 
-            (board.at(1) == player && board.at(4) == player && board.at(7) == player) ||
-            (board.at(2) == player && board.at(5) == player && board.at(8) == player) ||
-            (board.at(0) == player && board.at(5) == player && board.at(8) == player) ||
-            (board.at(2) == player && board.at(4) == player && board.at(6) == player));
+bool GameState::PlayerWins(int player, vector<int> newBoard) {
+    return ((newBoard.at(0) == player && newBoard.at(1) == player && newBoard.at(2) == player) ||
+            (newBoard.at(3) == player && newBoard.at(4) == player && newBoard.at(5) == player) ||
+            (newBoard.at(6) == player && newBoard.at(7) == player && newBoard.at(8) == player) ||
+            (newBoard.at(0) == player && newBoard.at(3) == player && newBoard.at(6) == player) || 
+            (newBoard.at(1) == player && newBoard.at(4) == player && newBoard.at(7) == player) ||
+            (newBoard.at(2) == player && newBoard.at(5) == player && newBoard.at(8) == player) ||
+            (newBoard.at(0) == player && newBoard.at(5) == player && newBoard.at(8) == player) ||
+            (newBoard.at(2) == player && newBoard.at(4) == player && newBoard.at(6) == player));
 }
 
 bool GameState::IsDraw() {
@@ -66,74 +67,58 @@ int GameState::GetP2() {
     return p2;
 }
 
-int GameState::AIBestMove() {
-    vector<int> emptySpots = GetEmptySpots(board);
-    vector<int> moveScores = GetMoveScores(board, currP, currP);
-    return emptySpots.at(GetMaxIndex(moveScores));
-}
-
-vector<int> GameState::GetMoveScores(vector<int> newBoard, int currPlayer, int origPlayer) {
+vector<int> GameState::AIBestMove(vector<int> newBoard, int player) {
     vector<int> emptySpots = GetEmptySpots(newBoard);
+    vector<int> finalMove;
+
+    if(PlayerWins(1, newBoard)) {
+        finalMove.push_back(1);
+        return finalMove;
+    }
+    if(PlayerWins(2, newBoard)) {
+        finalMove.push_back(-1);
+        return finalMove;
+    }
+    else if(emptySpots.size() == 0) {
+        finalMove.push_back(0);
+        return finalMove;
+    }
+
+    vector<int> moveIndex;
     vector<int> moveScores;
 
-    if(PlayerWins(currPlayer, newBoard) && currPlayer == origPlayer) {
-        moveScores.push_back(1);
-        return moveScores; 
-    }
-    else if(PlayerWins(currPlayer, newBoard) && currPlayer != origPlayer) {
-        moveScores.push_back(-1);
-        return moveScores;
-    } 
-    else if(emptySpots.size() == 0) {
-        moveScores.push_back(0);
-        return moveScores;
-    }
+    for(int i = 0; i < emptySpots.size(); i++) {
+        //vector<int> boardCopy = newBoard;
+        newBoard[emptySpots[i]] = player;
 
-    for(int i : emptySpots) {
-        newBoard.at(i) = currPlayer; 
-        int score;
-        if(currPlayer == origPlayer) {
-            score = GetMoveScores(newBoard, (currPlayer == 1) ? 2 : 1, origPlayer).at(0);
+        int totalScore;
+        if(player == 1) {
+            totalScore = AIBestMove(newBoard, 2)[0];
         }
-        else {
-            score = GetMoveScores(newBoard, origPlayer, origPlayer).at(0);
+        else if(player == 2) {
+            totalScore = AIBestMove(newBoard, 1)[0];
         }
 
-        newBoard.at(i) = 0;
-
-        moveScores.push_back(score);
+        newBoard[emptySpots[i]] = 0;
+        moveIndex.push_back(i);
+        moveScores.push_back(totalScore);
     }
 
-    return moveScores;
+    vector<int> bestMove;
 
-}
-
-int GameState::GetMaxIndex(vector<int> scores) {
-    int max = scores.at(0);
-    int maxIndex = 0;
-
-    for(vector<int>::iterator i = scores.begin(); i != scores.end(); i++) {
-        if((*i) > max) {
-            max = (*i);
-            maxIndex = i - scores.begin();
-        }
+    if(player == 1) {
+        int max = *max_element(moveScores.begin(), moveScores.end());
+        int index = moveIndex[find(moveScores.begin(), moveScores.end(), max) - moveScores.begin()];
+        bestMove.push_back(max);
+        bestMove.push_back(emptySpots[index]);
     }
-
-    return maxIndex;
-}
-
-int GameState::GetMinIndex(vector<int> scores) {
-    int min = scores.at(0);
-    int minIndex = 0;
-
-    for(vector<int>::iterator i = scores.begin(); i != scores.end(); i++) {
-        if((*i) < min) {
-            min = (*i);
-            minIndex = i - scores.begin();
-        }
+    else if(player == 2) {
+        int min = *min_element(moveScores.begin(), moveScores.end());
+        int index = moveIndex[find(moveScores.begin(), moveScores.end(), min) - moveScores.begin()];
+        bestMove.push_back(min);
+        bestMove.push_back(emptySpots[index]);
     }
-
-    return minIndex;
+    return bestMove;
 }
 
 void GameState::PrintBoard() {

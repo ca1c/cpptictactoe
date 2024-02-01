@@ -24,7 +24,7 @@ int main() {
         gameState.PrintBoard();
         gameState.RequestMove();
         if(!gameState.GameOver()) {
-            gameState.MakeMove(gameState.AIBestMove());
+            gameState.MakeMove(gameState.AIBestMove(gameState.GetBoard(), computerSelection)[1]);
             gameState.PrintBoard();
             cout << "Computer Made Move!"<< endl;
         }
