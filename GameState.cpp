@@ -6,7 +6,7 @@
 using namespace std;
 
 GameState::GameState(int initP) {
-    currP = currP;
+    currP = initP;
     board.resize(9);
     cout << "GameState initialized!" << endl;
 }
@@ -31,11 +31,15 @@ bool GameState::PlayerWins(int player, vector<int> board) {
     return ((board.at(0) == player && board.at(1) == player && board.at(2) == player) ||
             (board.at(3) == player && board.at(4) == player && board.at(5) == player) ||
             (board.at(6) == player && board.at(7) == player && board.at(8) == player) ||
-            (board.at(0) == player && board.at(3) == player && board.at(6) == player) ||
+            (board.at(0) == player && board.at(3) == player && board.at(6) == player) || 
             (board.at(1) == player && board.at(4) == player && board.at(7) == player) ||
             (board.at(2) == player && board.at(5) == player && board.at(8) == player) ||
             (board.at(0) == player && board.at(5) == player && board.at(8) == player) ||
             (board.at(2) == player && board.at(4) == player && board.at(6) == player));
+}
+
+void GameState::MakeMove(int index) {
+    board.at(index) = currP;
 }
 
 int GameState::GetP1() {
@@ -58,7 +62,7 @@ vector<int> GameState::GetMoveScores(vector<int> board, int currPlayer, int orig
  
     if(PlayerWins(currPlayer, board) && currPlayer == origPlayer) {
         moveScores.push_back(1);
-        return moveScores;
+        return moveScores; 
     }
     else if(PlayerWins(currPlayer, board) && currPlayer != origPlayer) {
         moveScores.push_back(-1);
@@ -115,4 +119,41 @@ int GameState::GetMinIndex(vector<int> scores) {
     }
 
     return minIndex;
+}
+
+void GameState::PrintBoard() {
+    int positionCounter = 1;
+    cout << endl;
+    for(vector<int>::iterator i = board.begin(); i != board.end(); i++) {        
+        
+        cout << (*i);
+
+        if(positionCounter == 3) {
+            cout << endl;
+            positionCounter = 1;
+        }
+        else {
+            cout << " | ";
+            positionCounter++;
+        }
+    }
+    cout << endl;
+}
+
+bool GameState::IsValidMove(int move) {
+    return board.at(move) == 0;
+}
+
+void GameState::RequestMove() {
+    int move;
+    cout << "Make your move! (type a number 1-9 top left descending): ";
+    cin >> move;
+
+    if(IsValidMove(move - 1)) {
+        this->MakeMove(move - 1);
+    }
+    else {
+        cout << "Invalid Move! Please enter your move again!" << endl;
+        RequestMove();
+    }
 }

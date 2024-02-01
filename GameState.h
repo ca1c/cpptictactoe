@@ -24,6 +24,9 @@ class GameState {
         vector<int> GetMoveScores(vector<int> board, int currPlayer, int origPlayer);
         int GetMaxIndex(vector<int> scores);
         int GetMinIndex(vector<int> scores);
+        void PrintBoard();
+        bool IsValidMove(int move);
+        void RequestMove();
 };
 
 #endif
