@@ -69,18 +69,23 @@ int GameState::GetP2() {
 int GameState::AIBestMove() {
     vector<int> emptySpots = GetEmptySpots(board);
     vector<int> moveScores = GetMoveScores(board, currP, currP);
+    cout << "[";
+    for(int i = 0; i < moveScores.size(); i++) {
+        cout << moveScores.at(i) << ", ";    
+    }
+    cout << "]" << endl;
     return emptySpots.at(GetMaxIndex(moveScores));
 }
 
-vector<int> GameState::GetMoveScores(vector<int> board, int currPlayer, int origPlayer) {
-    vector<int> emptySpots = GetEmptySpots(board);
+vector<int> GameState::GetMoveScores(vector<int> newBoard, int currPlayer, int origPlayer) {
+    vector<int> emptySpots = GetEmptySpots(newBoard);
     vector<int> moveScores;
  
-    if(PlayerWins(currPlayer, board) && currPlayer == origPlayer) {
+    if(PlayerWins(currPlayer, newBoard) && currPlayer == origPlayer) {
         moveScores.push_back(1);
         return moveScores; 
     }
-    else if(PlayerWins(currPlayer, board) && currPlayer != origPlayer) {
+    else if(PlayerWins(currPlayer, newBoard) && currPlayer != origPlayer) {
         moveScores.push_back(-1);
         return moveScores;
     } 
@@ -89,18 +94,17 @@ vector<int> GameState::GetMoveScores(vector<int> board, int currPlayer, int orig
         return moveScores;
     }
 
-    for(vector<int>::iterator i = emptySpots.begin(); i != emptySpots.end(); i++) {
-        board.at((*i)) = currPlayer; 
-
+    for(int i : emptySpots) {
+        newBoard.at(i) = currPlayer; 
         int score;
-        if(currPlayer == 1) {
-            score = GetMoveScores(board, 2, origPlayer).at(0);
+        if(currPlayer == origPlayer) {
+            score = GetMoveScores(newBoard, (currPlayer == 1) ? 2 : 1, origPlayer).at(0);
         }
-        else if(currPlayer == 2) {
-            score = GetMoveScores(board, 1, origPlayer).at(0);
+        else {
+            score = GetMoveScores(newBoard, origPlayer, origPlayer).at(0);
         }
 
-        board.at((*i)) = 0;
+        newBoard.at(i) = 0;
 
         moveScores.push_back(score);
     }
