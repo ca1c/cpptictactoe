@@ -80,7 +80,7 @@ int GameState::AIBestMove() {
 vector<int> GameState::GetMoveScores(vector<int> newBoard, int currPlayer, int origPlayer) {
     vector<int> emptySpots = GetEmptySpots(newBoard);
     vector<int> moveScores;
- 
+
     if(PlayerWins(currPlayer, newBoard) && currPlayer == origPlayer) {
         moveScores.push_back(1);
         return moveScores; 
