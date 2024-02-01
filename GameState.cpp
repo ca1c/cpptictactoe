@@ -126,7 +126,16 @@ void GameState::PrintBoard() {
     cout << endl;
     for(vector<int>::iterator i = board.begin(); i != board.end(); i++) {        
         
-        cout << (*i);
+        switch((*i)) {
+            case 1:
+                cout << "X";
+                break;
+            case 2:
+                cout << "O";
+                break;
+            default:
+                cout << "_";
+        }
 
         if(positionCounter == 3) {
             cout << endl;

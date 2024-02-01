@@ -11,8 +11,14 @@ int main() {
     int playerSelection;
     int computerSelection;
     cout << "Welcome to TicTacToe!" << endl;
-    cout << "Would you like to play X or O? (1 for x, 2 for o): ";
-    cin >> playerSelection;
+    while(playerSelection != 1 && playerSelection != 2) {
+        cout << "Would you like to play X or O? (1 for x, 2 for o): ";
+        cin >> playerSelection;
+
+        if(playerSelection != 1 || playerSelection != 2) {
+            cout << "Invalid player selection..." << endl;
+        }
+    }
 
     computerSelection = playerSelection == 1 ? 2 : 1;
 
