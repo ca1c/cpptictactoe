@@ -17,6 +17,8 @@ class GameState {
         vector<int> GetBoard();
         vector<int> GetEmptySpots(vector<int> board);
         bool PlayerWins(int player, vector<int> board);
+        bool IsDraw();
+        bool GameOver();
         void MakeMove(int index);
         int GetP1();
         int GetP2();

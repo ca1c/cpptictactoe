@@ -38,8 +38,24 @@ bool GameState::PlayerWins(int player, vector<int> board) {
             (board.at(2) == player && board.at(4) == player && board.at(6) == player));
 }
 
+bool GameState::IsDraw() {
+    vector<int> emptySpots = GetEmptySpots(board);
+    return emptySpots.empty();
+}
+
+bool GameState::GameOver() {
+    return (PlayerWins(p1, board) || PlayerWins(p2, board) || IsDraw());
+}
+
 void GameState::MakeMove(int index) {
     board.at(index) = currP;
+
+    if(currP == 1) {
+        currP = 2;
+    }
+    else {
+        currP = 1;
+    }
 }
 
 int GameState::GetP1() {
