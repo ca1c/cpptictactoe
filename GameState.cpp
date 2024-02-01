@@ -69,11 +69,6 @@ int GameState::GetP2() {
 int GameState::AIBestMove() {
     vector<int> emptySpots = GetEmptySpots(board);
     vector<int> moveScores = GetMoveScores(board, currP, currP);
-    cout << "[";
-    for(int i = 0; i < moveScores.size(); i++) {
-        cout << moveScores.at(i) << ", ";    
-    }
-    cout << "]" << endl;
     return emptySpots.at(GetMaxIndex(moveScores));
 }
 
