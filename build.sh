@@ -1,5 +1,7 @@
 #!/bin/sh
 
-g++ main.cpp -o main
+# g++ main.cpp GameState.cpp -o tictactoe
 
-./main
+g++ -o tictactoe main.cpp GameState.cpp -lsfml-graphics -lsfml-window -lsfml-system
+
+./tictactoe

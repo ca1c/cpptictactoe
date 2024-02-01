@@ -1,13 +1,21 @@
 #include "GameState.h"
 #include <iostream>
 #include <vector>
+#include <SFML/Graphics.hpp>
 
 using namespace std;
 
-const int BOARD_SIZE = 9;
+void PlayTextBased();
+void PlayGraphical();
 
 int main() {
+    // PlayTextBased();
+    PlayGraphical();
 
+    return 0;
+}
+
+void PlayTextBased() {
     int playerSelection;
     int computerSelection;
     cout << "Welcome to TicTacToe!" << endl;
@@ -54,9 +62,21 @@ int main() {
         cout << "Draw!" << endl;
         cout << endl;
     }
+}
 
+void PlayGraphical() {
+    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML tictactoe");
+    while (window.isOpen()) {
+        sf::Event event;
+        while(window.pollEvent(event)) {
+            if(event.type == sf::Event::Closed) {
+                window.close();
+            }
+        }
+        window.clear(sf::Color::Black);
 
-    return 0;
+        window.display();
+    }
 }
 
 
